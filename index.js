@@ -37,23 +37,29 @@ function requestPage(url) {
                 var $item = $(this);
                 var id = $item.find('a').attr('href').split('/')[2];
                 var imgo = $item.find('img').attr('src');
-                /*
+                var hide = false;
+                
                 if (imgo.indexOf('.gif') === -1) {
-
+		    /*
                     var imga = imgo.split('.');
                     var img = imga.splice(0, imga.length - 2).join('.') + '.jpg'; // get full image from cdn
                     console.log(img);
                     var writer = fs.createWriteStream(id + '.jpg');
                     request(img).pipe(writer);
+		    */
+                } else {
+                    hide = true;
                 }
-                */
+                
                 var year = $item.find('.year_type').text().split(' ')[0].split('(').join('');
                 var title = entities.decode($($item.find('a').get(1)).text()).split('"').join('""');
                 var plot = entities.decode($item.find('.outline').text()).split('"').join('""'); // scape quotes csv
                 var votes = $item.find('.rating.rating-list').first().attr('title').split('(')[1].split(' votes)')[0].split(',').join('');
-                var ytsearch = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(title);
+                var ytsearch = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(title + ' theme song');
                 var csv = util.format('"%s","%s","%s","%s","[PUT YT HERE]","%s","%s","%s"', votes, id, title, ytsearch, imgo, year, plot);
-                console.log(csv); //rank,title,year, plot
+                if(!hide){
+                    console.log(csv); //rank,title,year, plot
+                }
                 rank++;
 
             });
